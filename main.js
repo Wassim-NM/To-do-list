@@ -23,7 +23,7 @@ form.addEventListener('submit', (event) => {
         id: new Date().getTime(),
         content: event.target.content.value,
         category: event.target.category.value,
-        done: false
+        completed: false
     };
     todoList.push(todoItem);
     localStorage.setItem('todoList', JSON.stringify(todoList));
@@ -38,7 +38,15 @@ window.addEventListener('load', displayTodos);
     todoDiv.innerHTML = '';
     todoList.forEach(todoElement => {
         const todoListContainer = document.createElement('div');
+        todoListContainer.classList.add('todo-item');
         todoListContainer.classList.add('todo-item')
+        if(todoElement.completed){
+            todoListContainer.classList.add('done');
+        }
+        else{
+            todoListContainer.classList.remove('done');
+        }
+
         //checkbox
         const label = document.createElement('label');
         const input = document.createElement('input');
@@ -91,7 +99,7 @@ window.addEventListener('load', displayTodos);
         })
 
         //Activating Edit Button
-        editButton.addEventListener('click', (event) =>{
+        editBtn.addEventListener('click', (event) =>{
             const contentInput = contentDiv.querySelector('input');
             contentInput.removeAttribute('readonly');
             contentInput.focus();
@@ -107,4 +115,12 @@ window.addEventListener('load', displayTodos);
                 }
             })
         })
+
+        //Activating checkBox
+        input.addEventListener('change', (event) => {
+            todoElement.completed = event.target.checked;
+            localStorage.setItem('todoList', JSON.stringify(todoList));
+            displayTodos()
+        })
+    });
  }
